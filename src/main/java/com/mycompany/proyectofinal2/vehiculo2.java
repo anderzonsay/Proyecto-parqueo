@@ -1,7 +1,10 @@
 
+package com.mycompany.proyectofinal2;
+
+
 public class vehiculo2 {
     
-    private String placa;
+     private String placa;
   
     private String modelo;
 
@@ -35,5 +38,6 @@ public class vehiculo2 {
    
     } 
 }
+    
     
 
