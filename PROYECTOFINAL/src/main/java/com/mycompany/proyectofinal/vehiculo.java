@@ -4,6 +4,16 @@ package com.mycompany.proyectofinal;
 
 public class vehiculo {
     
+    private String Rol;
+
+    public String getRol() {
+        return Rol;
+    }
+
+    public void setRol(String Rol) {
+        this.Rol = Rol;
+    }
+    
     private String placa;
   
     private String modelo;
@@ -30,10 +40,13 @@ public class vehiculo {
      
 
     // 🔹 Constructor con parámetros
-    public vehiculo(String placa, String modelo) {
+    public vehiculo(String placa, String modelo, String Rol) {
         this.placa = placa;
      
         this.modelo = modelo;
+        
+        this.Rol = Rol;
+        
      
    
     } 

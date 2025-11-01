@@ -9,7 +9,7 @@ public class PROYECTOFINAL {
         
         mostrardatos parqueo= new mostrardatos();
         
-        
+        parqueo.setVisible(true);
         
     }
 }

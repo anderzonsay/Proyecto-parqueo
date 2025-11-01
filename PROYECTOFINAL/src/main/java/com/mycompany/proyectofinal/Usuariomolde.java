@@ -3,7 +3,15 @@ package com.mycompany.proyectofinal;
 
 
 public class Usuariomolde {
-    
+    private int usuarioid;
+
+    public int getUsuarioid() {
+        return usuarioid;
+    }
+
+    public void setUsuarioid(int usuarioid) {
+        this.usuarioid = usuarioid;
+    }
     private String Nombre;
     private int Carnet;
     private vehiculo Usuario;

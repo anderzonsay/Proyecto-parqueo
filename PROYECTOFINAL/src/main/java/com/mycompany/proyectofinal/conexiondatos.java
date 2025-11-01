@@ -1,44 +1,22 @@
-
 package com.mycompany.proyectofinal;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
- 
 public class conexiondatos {
-    
-      // Datos de la conexión (ajusta según tu base de datos)
-    private static final String URL = "jdbc:mysql://Basededatos:3306/basededatos.db";
-   
-    
-    private static Connection conexion;
 
-    // Método para conectar
     public static Connection conectar() {
-         Connection conexion = null;
-        
+        Connection conexion = null;
         try {
-            
-            
-            conexion = DriverManager.getConnection(URL);
-            System.out.println("✅ Conexión establecida correctamente.");
-        
+            // Asegúrate de que este archivo exista en la carpeta del proyecto
+            String url = "jdbc:sqlite:Basededatos/basededatos.db";
+            conexion = DriverManager.getConnection(url);
+            System.out.println("✅ Conexión exitosa a SQLite");
         } catch (SQLException e) {
-            System.out.println("❌ Error al conectar con la base de datos -> " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "❌ Error al conectar con la base de datos -> " + e.getMessage());
         }
         return conexion;
     }
-
-    // Método para desconectar
-    public static void desconectar() {
-        try {
-            if (conexion != null && !conexion.isClosed()) {
-                conexion.close();
-                System.out.println("🔒 Conexión cerrada correctamente.");
-            }
-        } catch (SQLException e) {
-            System.out.println("❌ Error al cerrar la conexión -> " + e.getMessage());
-        }
-    }
 }
-    
-
