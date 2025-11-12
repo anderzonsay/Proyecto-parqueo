@@ -44,6 +44,9 @@ public class mostrardatos extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         placa = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        Entrada = new javax.swing.JTextField();
+        Ingresar2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -151,18 +154,42 @@ public class mostrardatos extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setText("Entrada");
+
+        Entrada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EntradaActionPerformed(evt);
+            }
+        });
+
+        Ingresar2.setText("Ingresar2");
+        Ingresar2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Ingresar2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jLabel1)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(jLabel1))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel2)))
                 .addGap(52, 52, 52)
-                .addComponent(placa, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(placa, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+                    .addComponent(Entrada))
                 .addGap(45, 45, 45)
-                .addComponent(jButton1)
-                .addContainerGap(107, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addComponent(Ingresar2))
+                .addContainerGap(99, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -172,7 +199,12 @@ public class mostrardatos extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(placa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
-                .addContainerGap(285, Short.MAX_VALUE))
+                .addGap(42, 42, 42)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(Entrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Ingresar2))
+                .addContainerGap(220, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("tab2", jPanel2);
@@ -212,16 +244,16 @@ public class mostrardatos extends javax.swing.JFrame {
        String placa= txtdigitos.getText();
        String modelo= txtdiseño.getText();
        if(Rol.getSelectedItem().equals("Catedratico")){
-           uml = "catedratico";
-       } else {
-        uml = "alumno";
+           uml = "Catedratico";
+       } else if (Rol.getSelectedItem().equals("Estudiante")){
+        uml = "Estudiante";
     }
        vehiculo Icono= new vehiculo(placa, modelo, uml);
        Usuariomolde Usuario= new Usuariomolde(nombre, id, Icono);
        
        
        usuariodatos lite=new usuariodatos();
-       lite.agregarusuario(Usuario,Icono);
+       lite.agregarUsuario(Usuario,Icono);
        
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -236,9 +268,21 @@ public class mostrardatos extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
       String numero = placa.getText();
       Spot Disponibilidad= new Spot();
-      Disponibilidad.registrarEntrada(numero);
+      Disponibilidad.registrarSalida(numero);
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void EntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EntradaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_EntradaActionPerformed
+
+    private void Ingresar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Ingresar2ActionPerformed
+        
+        
+        Spot Lunes= new Spot();
+        String placa= Entrada.getText();
+        Lunes.registrarEntrada(placa);
+    }//GEN-LAST:event_Ingresar2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -266,10 +310,13 @@ public class mostrardatos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField Entrada;
+    private javax.swing.JButton Ingresar2;
     private javax.swing.JComboBox<String> Rol;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTabbedPane jTabbedPane1;

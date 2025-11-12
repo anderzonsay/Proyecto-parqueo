@@ -8,39 +8,43 @@ import javax.swing.JOptionPane;
 
 public class usuariodatos {
     
-  public void agregarusuario(Usuariomolde messi  ,vehiculo ander) {
-    String sql = "INSERT INTO Usuario (Nombres, Carnet) VALUES (?, ?)";
-    String coche1= "INSERT INTO vehiculo (Placa, Tipovehiculo, Area, Id) VALUES (?, ?, ?, ?)";
+  public void agregarUsuario(Usuariomolde usuario, vehiculo vehiculo) {
+    String sqlUsuario = "INSERT INTO Usuario ( Nombres, Carnet) VALUES (?, ?)";
+    String sqlVehiculo = "INSERT INTO vehiculo (Placa, Tipovehiculo, Area, IdUsuario) VALUES (?, ?, ?, ?)";
 
     try (Connection conexion = conexiondatos.conectar();
-         PreparedStatement mini = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+         PreparedStatement psUsuario = conexion.prepareStatement(sqlUsuario, Statement.RETURN_GENERATED_KEYS)) {
 
-        mini.setString(1, messi.getNombre());
-        mini.setInt(2, messi.getCarnet());
+        // Insertar usuario
+        psUsuario.setString(1, usuario.getNombre());
+        psUsuario.setInt(2, usuario.getCarnet());
+        psUsuario.executeUpdate();
 
-        mini.executeUpdate();
+        // Obtener ID autogenerado
+        try (ResultSet rs = psUsuario.getGeneratedKeys()) {
+            if (rs.next()) {
+                int idGenerado = rs.getInt(1);
+                usuario.setUsuarioid(idGenerado);
 
-        try (ResultSet resultado = mini.getGeneratedKeys()) {
-            if (resultado.next()) {
-                int id = resultado.getInt(1);
-                messi.setUsuarioid(id);
+                // Insertar vehículo con el ID del usuario
+                try (PreparedStatement psVehiculo = conexion.prepareStatement(sqlVehiculo)) {
+                    psVehiculo.setString(1, vehiculo.getPlaca());
+                    psVehiculo.setString(2, vehiculo.getModelo()); // 'carro' o 'moto'
+                    psVehiculo.setString(3, vehiculo.getRol());          // 'A01', 'A02', 'A03'
+                    psVehiculo.setInt(4, idGenerado);
+
+                    psVehiculo.executeUpdate();
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "⚠️ No se generó ID de usuario. No se pudo registrar el vehículo.");
+                return;
             }
         }
-         // Insertar vehículo con el ID del usuario
-                    try (PreparedStatement stmtVeh = conexion.prepareStatement(coche1)) {
-                        stmtVeh.setString(1, ander.getPlaca());
-                        stmtVeh.setString(2, ander.getModelo());
-                        stmtVeh.setString(3, ander.getRol());
-                        stmtVeh.setInt(4, messi.getUsuarioid());
-                        stmtVeh.executeUpdate();
-                    }
-            
-        
 
-        JOptionPane.showMessageDialog(null, "✅ Usuario agregado correctamente");
+        JOptionPane.showMessageDialog(null, "✅ Usuario y vehículo agregados correctamente.");
 
-    } catch (SQLException x) {
-        JOptionPane.showMessageDialog(null, "❌ Error al agregar usuario: " + x.getMessage());
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
 }
-}
+  }
