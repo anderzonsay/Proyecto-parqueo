@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.proyectofinal;
+import com.mycompany.proyectofinal.panelmapa;
+import java.awt.Component;
 
 /**
  *
@@ -40,6 +42,7 @@ public class mostrardatos extends javax.swing.JFrame {
         txtmodelo = new javax.swing.JLabel();
         txtdiseño = new javax.swing.JTextField();
         Rol = new javax.swing.JComboBox<>();
+        Mapa = new javax.swing.JToggleButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         placa = new javax.swing.JTextField();
@@ -85,6 +88,13 @@ public class mostrardatos extends javax.swing.JFrame {
 
         Rol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Catedratico", "Estudiante", " " }));
 
+        Mapa.setText("Mostar mapa");
+        Mapa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MapaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -106,7 +116,11 @@ public class mostrardatos extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton3)
                     .addComponent(Rol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(74, Short.MAX_VALUE))
+                .addContainerGap(227, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Mapa)
+                .addGap(166, 166, 166))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -134,7 +148,9 @@ public class mostrardatos extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtmodelo)
                     .addComponent(txtdiseño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(136, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
+                .addComponent(Mapa)
+                .addGap(65, 65, 65))
         );
 
         jTabbedPane1.addTab("tab1", jPanel1);
@@ -189,7 +205,7 @@ public class mostrardatos extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1)
                     .addComponent(Ingresar2))
-                .addContainerGap(99, Short.MAX_VALUE))
+                .addContainerGap(252, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -204,7 +220,7 @@ public class mostrardatos extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(Entrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Ingresar2))
-                .addContainerGap(220, Short.MAX_VALUE))
+                .addContainerGap(254, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("tab2", jPanel2);
@@ -215,15 +231,15 @@ public class mostrardatos extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(308, Short.MAX_VALUE))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 672, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(155, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(117, Short.MAX_VALUE))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(83, Short.MAX_VALUE))
         );
 
         pack();
@@ -284,6 +300,12 @@ public class mostrardatos extends javax.swing.JFrame {
         Lunes.registrarEntrada(placa);
     }//GEN-LAST:event_Ingresar2ActionPerformed
 
+    private void MapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MapaActionPerformed
+        Component panelmapa = null;
+       jTabbedPane1.setSelectedComponent(panelmapa);
+
+    }//GEN-LAST:event_MapaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -312,6 +334,7 @@ public class mostrardatos extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Entrada;
     private javax.swing.JButton Ingresar2;
+    private javax.swing.JToggleButton Mapa;
     private javax.swing.JComboBox<String> Rol;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
