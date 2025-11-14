@@ -1,10 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package com.mycompany.proyectofinal;
-import com.mycompany.proyectofinal.panelmapa;
-import java.awt.Component;
+
+import javax.swing.SwingUtilities;
+
 
 /**
  *
@@ -19,6 +17,11 @@ public class mostrardatos extends javax.swing.JFrame {
      */
     public mostrardatos() {
         initComponents();
+        
+     
+
+
+
     }
 
     /**
@@ -50,6 +53,10 @@ public class mostrardatos extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         Entrada = new javax.swing.JTextField();
         Ingresar2 = new javax.swing.JButton();
+        valor = new javax.swing.JComboBox<>();
+        billete = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        pago = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -88,6 +95,7 @@ public class mostrardatos extends javax.swing.JFrame {
 
         Rol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Catedratico", "Estudiante", " " }));
 
+        Mapa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logomapa.jpeg"))); // NOI18N
         Mapa.setText("Mostar mapa");
         Mapa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -148,7 +156,7 @@ public class mostrardatos extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtmodelo)
                     .addComponent(txtdiseño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                 .addComponent(Mapa)
                 .addGap(65, 65, 65))
         );
@@ -185,6 +193,18 @@ public class mostrardatos extends javax.swing.JFrame {
             }
         });
 
+        valor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Variable", "Flat" }));
+
+        billete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                billeteActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Cobros");
+
+        pago.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Efectivo", "Tarjeta" }));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -196,16 +216,29 @@ public class mostrardatos extends javax.swing.JFrame {
                         .addComponent(jLabel1))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel2)))
+                        .addComponent(jLabel2))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel3)))
                 .addGap(52, 52, 52)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(placa, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
-                    .addComponent(Entrada))
-                .addGap(45, 45, 45)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
-                    .addComponent(Ingresar2))
-                .addContainerGap(252, Short.MAX_VALUE))
+                    .addComponent(billete, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(placa, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(45, 45, 45)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jButton1)
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addGap(134, 134, 134)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(pago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(valor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addComponent(Entrada, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                            .addComponent(Ingresar2)
+                            .addGap(138, 138, 138))))
+                .addContainerGap(120, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -215,12 +248,22 @@ public class mostrardatos extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(placa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
-                .addGap(42, 42, 42)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(Entrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Ingresar2))
-                .addContainerGap(254, Short.MAX_VALUE))
+                    .addComponent(billete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(2, 2, 2)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(valor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(Entrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Ingresar2)))
+                .addGap(52, 52, 52)
+                .addComponent(pago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(147, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("tab2", jPanel2);
@@ -254,9 +297,11 @@ public class mostrardatos extends javax.swing.JFrame {
     }//GEN-LAST:event_txtidentificaciónActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       String uml = "";
+       
+       
+        String uml = "";
         String nombre= txtnombreingresado.getText();
-       int id= Integer.parseInt(txtidentificación.getText());
+       long id= Long.parseLong(txtidentificación.getText());
        String placa= txtdigitos.getText();
        String modelo= txtdiseño.getText();
        if(Rol.getSelectedItem().equals("Catedratico")){
@@ -283,8 +328,17 @@ public class mostrardatos extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
       String numero = placa.getText();
+      double cobro= Double.parseDouble(billete.getText());
+       String formadepago= "";
+        if (pago.getSelectedIndex() == 0){
+          
+           formadepago = "Efectivo";
+       }else {
+           formadepago = "Tarjeta";
+       } 
+
       Spot Disponibilidad= new Spot();
-      Disponibilidad.registrarSalida(numero);
+      Disponibilidad.registrarSalida(numero, cobro, formadepago);
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -293,18 +347,36 @@ public class mostrardatos extends javax.swing.JFrame {
     }//GEN-LAST:event_EntradaActionPerformed
 
     private void Ingresar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Ingresar2ActionPerformed
-        
+       String metododepago= "";
+       
+       if (valor.getSelectedIndex() == 0){
+          
+           metododepago = "variable";
+       }else {
+           metododepago = "plano";
+       } 
+       String formadepago= "";
+        if (pago.getSelectedIndex() == 0){
+          
+           formadepago = "Efectivo";
+       }else {
+           formadepago = "Tarjeta";
+       } 
         
         Spot Lunes= new Spot();
         String placa= Entrada.getText();
-        Lunes.registrarEntrada(placa);
+        double cobro= Double.parseDouble(billete.getText());
+        Lunes.registrarEntrada(placa, metododepago, cobro, formadepago);
     }//GEN-LAST:event_Ingresar2ActionPerformed
 
     private void MapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MapaActionPerformed
-        Component panelmapa = null;
-       jTabbedPane1.setSelectedComponent(panelmapa);
+       SwingUtilities.invokeLater(()->new vista());
 
     }//GEN-LAST:event_MapaActionPerformed
+
+    private void billeteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_billeteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_billeteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -336,13 +408,16 @@ public class mostrardatos extends javax.swing.JFrame {
     private javax.swing.JButton Ingresar2;
     private javax.swing.JToggleButton Mapa;
     private javax.swing.JComboBox<String> Rol;
+    private javax.swing.JTextField billete;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JComboBox<String> pago;
     private javax.swing.JTextField placa;
     private javax.swing.JLabel txtcarnet;
     private javax.swing.JTextField txtdigitos;
@@ -352,6 +427,7 @@ public class mostrardatos extends javax.swing.JFrame {
     private javax.swing.JLabel txtmodelo;
     private javax.swing.JTextField txtnombreingresado;
     private javax.swing.JLabel txtplaca;
+    private javax.swing.JComboBox<String> valor;
     // End of variables declaration//GEN-END:variables
 }
 

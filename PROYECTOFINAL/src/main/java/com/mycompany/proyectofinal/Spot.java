@@ -5,118 +5,208 @@ import java.sql.*;
 import javax.swing.JOptionPane;
 
 public class Spot {
-    
-   
-   public void registrarEntrada(String placa) {
-    String sqlBuscarVehiculo = "SELECT Tipovehiculo, Area FROM vehiculo WHERE Placa = ?";
-    String sqlBuscarArea = "SELECT Id FROM Area WHERE Rol = ? AND Tipovehiculo = ?";
-    String sqlBuscarSpot = "SELECT Id FROM spot WHERE Estado = 'libre' AND Area = ? AND Tipodevehiculo = ? LIMIT 1";
-    String sqlActualizarSpot = "UPDATE spot SET Estado = 'ocupado' WHERE Id = ?";
-    String sqlInsertarTicket = "INSERT INTO tickets (placa, area_id, spot_id, fecha_ingreso, modo, monto) VALUES (?, ?, ?, datetime('now'), 'hora', 0)";
 
-    try (Connection conn = conexiondatos.conectar();
-         PreparedStatement psVehiculo = conn.prepareStatement(sqlBuscarVehiculo);
-         PreparedStatement psArea = conn.prepareStatement(sqlBuscarArea);
-         PreparedStatement psSpot = conn.prepareStatement(sqlBuscarSpot);
-         PreparedStatement psUpdateSpot = conn.prepareStatement(sqlActualizarSpot);
-         PreparedStatement psInsertTicket = conn.prepareStatement(sqlInsertarTicket)) {
+    // ============================
+    //     CLASE DE COBROS
+    // ============================
+    public static class Cobro {
 
-        // 1️⃣ Buscar datos del vehículo
-        psVehiculo.setString(1, placa);
-        ResultSet rsVehiculo = psVehiculo.executeQuery();
-
-        if (!rsVehiculo.next()) {
-            JOptionPane.showMessageDialog(null, "❌ Vehículo no encontrado con la placa: " + placa);
-            return;
+        public double cobroPlano() {
+            return 15.0;
         }
 
-        String tipoVehiculo = rsVehiculo.getString("Tipovehiculo");
-        String area = rsVehiculo.getString("Area");
-
-        // 2️⃣ Verificar que el área exista y coincida con el tipo de vehículo
-        psArea.setString(1, area);
-        psArea.setString(2, tipoVehiculo);
-        ResultSet rsArea = psArea.executeQuery();
-
-        if (!rsArea.next()) {
-            JOptionPane.showMessageDialog(null, "⚠️ No existe un área válida para el vehículo de tipo " + tipoVehiculo);
-            return;
+        public double cobroVariable(double minutos) {
+            double horas = Math.ceil(minutos / 60.0);
+            return horas * 10.0;
         }
-
-        String areaId = rsArea.getString("Id");
-
-        // 3️⃣ Buscar un spot libre en esa área
-        psSpot.setString(1, areaId);
-        psSpot.setString(2, tipoVehiculo);
-        ResultSet rsSpot = psSpot.executeQuery();
-
-        if (rsSpot.next()) {
-            int spotId = rsSpot.getInt("Id");
-
-            // 4️⃣ Cambiar estado del spot a ocupado
-            psUpdateSpot.setInt(1, spotId);
-            psUpdateSpot.executeUpdate();
-
-            // 5️⃣ Crear el ticket de entrada
-            psInsertTicket.setString(1, placa);
-            psInsertTicket.setString(2, areaId);
-            psInsertTicket.setInt(3, spotId);
-            psInsertTicket.executeUpdate();
-
-            JOptionPane.showMessageDialog(null, "✅ Vehículo con placa " + placa +
-                    " estacionado en área " + areaId + ", spot #" + spotId);
-        } else {
-            JOptionPane.showMessageDialog(null, "⚠️ No hay spots libres disponibles en el área " + areaId);
-        }
-
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, "❌ Error al registrar entrada: " + e.getMessage());
-        e.printStackTrace();
     }
-}
 
+    // ============================
+    //       REGISTRAR ENTRADA
+    // ============================
+    public void registrarEntrada(String placa, String modo, double billete, String metodoPago) {
 
-    public void registrarSalida(String placa) {
-    String sqlBuscarTicket = """
-        SELECT t.spot_id, s.Area
-        FROM tickets t
-        JOIN spot s ON t.spot_id = s.Id
-        WHERE t.placa = ? AND t.fecha_salida IS NULL
-    """;
+        String sqlVehiculo = "SELECT Tipovehiculo, Area FROM vehiculo WHERE Placa = ?";
+        String sqlArea = "SELECT Id FROM Area WHERE Rol = ? AND Tipovehiculo = ?";
+        String sqlSpot = "SELECT Id FROM spot WHERE Estado = 'libre' AND Area = ? LIMIT 1";
 
-    String sqlActualizarSpot = "UPDATE spot SET Estado = 'libre' WHERE Id = ?";
-    String sqlActualizarTicket = "UPDATE tickets SET fecha_salida = datetime('now') WHERE placa = ? AND fecha_salida IS NULL";
+        String sqlInsertTicket = """
+            INSERT INTO tickets (placa, area_id, spot_id, fecha_ingreso, modo, monto, metodo_pago)
+            VALUES (?, ?, ?, datetime('now'), ?, ?, ?)
+        """;
 
-    try (Connection conn = conexiondatos.conectar();
-         PreparedStatement psTicket = conn.prepareStatement(sqlBuscarTicket);
-         PreparedStatement psSpot = conn.prepareStatement(sqlActualizarSpot);
-         PreparedStatement psUpdateTicket = conn.prepareStatement(sqlActualizarTicket)) {
+        String sqlUpdateSpot = "UPDATE spot SET Estado = 'ocupado' WHERE Id = ?";
 
-        // 1️⃣ Buscar el ticket activo y obtener spot y área
-        psTicket.setString(1, placa);
-        ResultSet rs = psTicket.executeQuery();
+        try (Connection conn = conexiondatos.conectar();
+             PreparedStatement psVehiculo = conn.prepareStatement(sqlVehiculo);
+             PreparedStatement psArea = conn.prepareStatement(sqlArea);
+             PreparedStatement psSpot = conn.prepareStatement(sqlSpot);
+             PreparedStatement psInsert = conn.prepareStatement(sqlInsertTicket);
+             PreparedStatement psUp = conn.prepareStatement(sqlUpdateSpot)) {
 
-        if (rs.next()) {
-            int spotId = rs.getInt("spot_id");
-            String area = rs.getString("Area");
+            // Vehículo
+            psVehiculo.setString(1, placa);
+            ResultSet rv = psVehiculo.executeQuery();
+            if (!rv.next()) {
+                JOptionPane.showMessageDialog(null, "❌ Vehículo no encontrado");
+                return;
+            }
+            String tipo = rv.getString("Tipovehiculo");
+            String areaRol = rv.getString("Area");
 
-            // 2️⃣ Liberar el spot
+            // Área
+            psArea.setString(1, areaRol);
+            psArea.setString(2, tipo);
+            ResultSet ra = psArea.executeQuery();
+            if (!ra.next()) {
+                JOptionPane.showMessageDialog(null, "❌ No existe un área válida para este vehículo");
+                return;
+            }
+            String areaId = ra.getString("Id");
+
+            // Spot
+            psSpot.setString(1, areaId);
+            ResultSet rs = psSpot.executeQuery();
+            if (!rs.next()) {
+                JOptionPane.showMessageDialog(null, "⚠️ No hay spots libres");
+                return;
+            }
+            int spotId = rs.getInt("Id");
+
+            // ============================
+            //        COBRO ENTRADA
+            // ============================
+            Cobro cobro = new Cobro();
+            double monto = 0;
+
+            if (modo.equalsIgnoreCase("plano")) {
+                monto = cobro.cobroPlano();
+            }
+
+            double cambio = billete - monto;
+            if (cambio < 0) {
+                JOptionPane.showMessageDialog(null, "❌ Billete insuficiente");
+                return;
+            }
+
+            // Guardar ticket
+            psUp.setInt(1, spotId);
+            psUp.executeUpdate();
+
+            psInsert.setString(1, placa);
+            psInsert.setString(2, areaId);
+            psInsert.setInt(3, spotId);
+            psInsert.setString(4, modo.toLowerCase());
+            psInsert.setDouble(5, monto);
+            psInsert.setString(6, metodoPago.toLowerCase()); // <<<<<<<< MÉTODO DE PAGO
+            psInsert.executeUpdate();
+
+            JOptionPane.showMessageDialog(null,
+                "🚗 ENTRADA REGISTRADA\n" +
+                "Modo: " + modo.toUpperCase() + "\n" +
+                "Método pago: " + metodoPago.toUpperCase() + "\n" +
+                "Monto cobrado: Q" + monto + "\n" +
+                "Billete: Q" + billete + "\n" +
+                "Cambio: Q" + cambio);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "❌ Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    // ============================
+    //        REGISTRAR SALIDA
+    // ============================
+    public void registrarSalida(String placa, double billete, String metodoPago) {
+
+        String sqlTicket = """
+            SELECT ticket_id, spot_id, fecha_ingreso, modo
+            FROM tickets 
+            WHERE placa = ? AND fecha_salida IS NULL
+        """;
+
+        String sqlUpdateTicket = """
+            UPDATE tickets
+            SET fecha_salida = datetime('now'), monto = ?, metodo_pago = ?
+            WHERE ticket_id = ?
+        """;
+
+        String sqlUpdateSpot = "UPDATE spot SET Estado = 'libre' WHERE Id = ?";
+
+        try (Connection conn = conexiondatos.conectar();
+             PreparedStatement psTicket = conn.prepareStatement(sqlTicket);
+             PreparedStatement psUpdateTicket = conn.prepareStatement(sqlUpdateTicket);
+             PreparedStatement psSpot = conn.prepareStatement(sqlUpdateSpot)) {
+
+            psTicket.setString(1, placa);
+            ResultSet rt = psTicket.executeQuery();
+
+            if (!rt.next()) {
+                JOptionPane.showMessageDialog(null, "❌ No existe ticket activo");
+                return;
+            }
+
+            int ticketId = rt.getInt("ticket_id");
+            int spotId = rt.getInt("spot_id");
+            String modo = rt.getString("modo");
+            String fechaIngreso = rt.getString("fecha_ingreso");
+
+            double monto = 0;
+            Cobro cobro = new Cobro();
+
+            // ============================
+            //          COBRO SALIDA
+            // ============================
+            if (modo.equalsIgnoreCase("variable")) {
+
+                // minutos transcurridos
+                String sqlMin = """
+                    SELECT CAST((JULIANDAY('now') - JULIANDAY(?)) * 1440 AS INTEGER) AS minutos
+                """;
+
+                PreparedStatement psMin = conn.prepareStatement(sqlMin);
+                psMin.setString(1, fechaIngreso);
+                ResultSet rm = psMin.executeQuery();
+                rm.next();
+                int minutos = rm.getInt("minutos");
+
+                monto = cobro.cobroVariable(minutos);
+
+            } else if (modo.equalsIgnoreCase("plano")) {
+                monto = 0; // ya pagó en entrada
+            }
+
+            // Cambio
+            double cambio = billete - monto;
+            if (cambio < 0) {
+                JOptionPane.showMessageDialog(null, "❌ El billete no cubre el pago");
+                return;
+            }
+
+            // Actualizar ticket
+            psUpdateTicket.setDouble(1, monto);
+            psUpdateTicket.setString(2, metodoPago.toLowerCase()); // <<<<<<<< MÉTODO DE PAGO
+            psUpdateTicket.setInt(3, ticketId);
+            psUpdateTicket.executeUpdate();
+
+            // liberar spot
             psSpot.setInt(1, spotId);
             psSpot.executeUpdate();
 
-            // 3️⃣ Marcar salida del ticket
-            psUpdateTicket.setString(1, placa);
-            psUpdateTicket.executeUpdate();
+            JOptionPane.showMessageDialog(null,
+                "🚗 SALIDA REGISTRADA\n" +
+                "Modo: " + modo.toUpperCase() + "\n" +
+                "Método pago: " + metodoPago.toUpperCase() + "\n" +
+                "Monto: Q" + monto + "\n" +
+                "Billete: Q" + billete + "\n" +
+                "Cambio: Q" + cambio +
+                "\nSpot liberado: " + spotId);
 
-            JOptionPane.showMessageDialog(null, "🚗 Vehículo con placa " + placa +
-                    " ha salido del área " + area + ". Spot #" + spotId + " liberado.");
-        } else {
-            JOptionPane.showMessageDialog(null, "⚠️ No se encontró un ticket activo para la placa: " + placa);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "❌ Error: " + e.getMessage());
+            e.printStackTrace();
         }
-
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, "❌ Error al registrar salida: " + e.getMessage());
-        e.printStackTrace();
     }
 }
-    }
+

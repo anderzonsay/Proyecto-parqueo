@@ -13,7 +13,7 @@ public class Usuariomolde {
         this.usuarioid = usuarioid;
     }
     private String Nombre;
-    private int Carnet;
+    private long Carnet;
     private vehiculo Usuario;
 
     public String getNombre() {
@@ -24,7 +24,7 @@ public class Usuariomolde {
         this.Nombre = Nombre;
     }
 
-    public int getCarnet() {
+    public long getCarnet() {
         return Carnet;
     }
 
@@ -43,7 +43,7 @@ public class Usuariomolde {
    
     
     //Constructor
-    public Usuariomolde(String Nombre, int Carnet, vehiculo Usuario){
+    public Usuariomolde(String Nombre, long Carnet, vehiculo Usuario){
       this.Nombre= Nombre;
       this.Carnet= Carnet;
       this.Usuario= Usuario;

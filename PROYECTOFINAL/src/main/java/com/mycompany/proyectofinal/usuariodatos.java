@@ -17,7 +17,7 @@ public class usuariodatos {
 
         // Insertar usuario
         psUsuario.setString(1, usuario.getNombre());
-        psUsuario.setInt(2, usuario.getCarnet());
+        psUsuario.setLong(2, usuario.getCarnet());
         psUsuario.executeUpdate();
 
         // Obtener ID autogenerado
